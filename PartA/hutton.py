@@ -15,6 +15,7 @@ def safediv(n, m):
 #def eval(n):
 #    return Just(n)
 
+# Here we take each indivi comp and feed it to a fnx to be applied on and safediving the final result if none of the indivi comp eval to Nothing
 def eval(x, y):
     return Just(x) >> (lambda n: Just(y) >> (lambda m: Just(safediv(n, m))))
 
