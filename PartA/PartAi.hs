@@ -66,7 +66,7 @@
 
 
 
--- 6
+-- 6 / 9
 -- -- Show that f * unit = unit * f = f and lift f * lift g = lift (f.g)
 -- Will show f * unit = unit * f = f since the right half was proved above
 --
@@ -123,4 +123,26 @@
 -- = bind unit [f x1, f x2, ...]
 -- = concat (map unit [f x1, f x2, ...])
 -- ...
--- -- [f x1, f x2, ...]
+-- = [f x1, f x2, ...]
+--
+-- 
+-- 9 Same idea as 6 but now expanding upon it.
+-- Currentyly unit (or return) only applies to ordinary values but what about monadic val?
+-- Way to do this is to bind return
+--
+-- Declartion of type var
+-- f:: a -> b
+-- An fmap implemented with (>>=) and return
+-- liftM :: Monad m => (a->b) -> m a -> m b
+-- return :: a -> m a   (half monadic)
+-- (liftM f) :: m a -> m b
+-- (>>=) :: Monad m => m a (a -> m b) -> m b
+-- 
+-- (bind return xs) -> ys
+-- (bind return) applies to xs
+-- return applies to x
+-- Which can then be composed with liftM
+-- i.e. bind liftM (bind return xs) 
+-- Where the arg passed into liftM is a monadic type
+--
+-- Made the unit(or return) a half-monadic fnx
