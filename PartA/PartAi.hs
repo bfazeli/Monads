@@ -68,4 +68,59 @@
 
 -- 6
 -- -- Show that f * unit = unit * f = f and lift f * lift g = lift (f.g)
-
+-- Will show f * unit = unit * f = f since the right half was proved above
+--
+-- Simply defining the various terms
+-- f :: a -> b
+-- f' :: a -> m a
+-- unit :: a -> m a
+-- lift f = unit . f
+-- f' = lift f
+--
+-- f * unit = unit * f = f      can be rewritten as: 
+-- f'* unit = unit * f' = bind f'
+--
+--
+-- Establish what it means to eval f' * g' on some xs
+-- bind can be applied to f' and g' resp
+-- = ((bind f') . (bind g')) xs
+-- 
+-- What does it mean to bind a fnx to xs
+-- It's simply applying that fnx to all elements of xs recursively and flattening it
+-- Thus,
+--
+-- bind f' xs = concat (map f' xs)
+-- unit x = [x] Wheere a unit of x is simply a wrapped val of x
+-- 
+-- I want to show that binding unit to xs will return just xs If successful
+-- bind unit xs
+-- = concat (map unit xs)
+-- = concat (map unit [x1, x2, ..., xN])
+-- = concat [unit x1, unit x2, ..., unit xN]
+-- = concaat [[x1], [x2], ..., [xN]]
+-- = [x1, x2, ..., xN]
+-- = xs
+--
+--
+--  Now to eval LHE
+-- (f' * unit) (x: xs)
+-- = ((bind f') . (bind unit)) (x:xs)
+-- = bind f' (bind unit (x:xs))
+-- Since bind unit (x) -> x
+-- = bind f' (x:xs)
+--
+-- Now to eval RHE
+-- (unit * f') (x: xs)
+-- = ((bind unit) . (bind f')) (x: xs)
+-- = bind unit (bind f' (x:xs))
+-- = bind f'(x:xs)
+-- same as: 
+-- = bind unit (concat (map f' [x1, x2, ..., xN]))
+-- = bind unit (concat [f' x1, f' x2, ...])
+-- = bind unit (concat [(unit . f) x1, (unit . f) x2, ...])
+-- = bind unit (concat [(unit (f x1)), (unit (f x2)), ...])
+-- = bind unit (concat [[f x1], [f x2], ...])
+-- = bind unit [f x1, f x2, ...]
+-- = concat (map unit [f x1, f x2, ...])
+-- ...
+-- -- [f x1, f x2, ...]
