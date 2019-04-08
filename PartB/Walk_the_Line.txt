@@ -1,0 +1,53 @@
+from typing import NewType
+from pymonad.Reader import curry
+from pymonad.Maybe import *
+
+# WALK THE LINE 
+# Written By: Kevin Marlis 
+
+# Goal: Make sure everytime birds land on one side of the pole, the person walking the line does not fall
+# Implemented using a Maybe Monad 
+
+# NewTypes 
+# Birds is synonymous to int
+# Pole is made up of a tuple of birds
+Birds = NewType('Birds', int)
+Pole = NewType('Pole', (Birds, Birds))
+
+# curry decorator from pymonad.Reader allows us to partially evaluate when too little arguements are passed in, this is especially useful when binding the results from a previous call 
+# If a bird lands on the left side of the pole the number of birds on that side is increased and we check to see that the difference between the left and right side is <= 3
+# If difference is between 3 return a Just type else return a Nothing 
+@curry              
+def landLeft(n: Birds, pole: Pole):
+    left = pole[0]
+    right = pole[1]
+    
+    if (abs((left + n) - right) < 4):
+        return Just((left + n, right))
+    else:
+        return Nothing
+
+# Similar to landLeft 
+@curry              
+def landRight(n: Birds, pole: Pole):
+    left = pole[0]
+    right = pole[1]
+    
+    if (abs(left - (right + n)) < 4):
+        return Just((left, right + n))
+    else:
+        return Nothing
+
+# Different bird represenations 
+oneBird = Birds(1)
+twoBirds = Birds(2)
+threeBirds = Birds(3)
+fourBirds = Birds(4)
+fiveBirds = Birds(5)
+
+# Creating a pole 
+poleTuple = (oneBird,twoBirds)
+pole = Pole(poleTuple)   
+
+# >> represents bind and passed an unwrapped result of the previous function call to the next function
+print(Just((0, 0)) >> landLeft(1) >> landRight(threeBirds) >> landRight(twoBirds))
