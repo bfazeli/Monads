@@ -9,9 +9,11 @@ def add(x, y):
 add7 = add(7)
 print(add7(400))
 
-def safediv(n, m):
-    return n / m 
-
+def safediv(n, m) -> Maybe:
+    if m != 0:
+        return n / m
+    else:
+        return Nothing
 #def eval(n):
 #    return Just(n)
 
